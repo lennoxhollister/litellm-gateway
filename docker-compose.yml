@@ -1,0 +1,13 @@
+# docker compose up -d   (reads UPSTREAM_API_KEY and LITELLM_MASTER_KEY from .env)
+services:
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:latest
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      UPSTREAM_API_KEY: ${UPSTREAM_API_KEY:?set UPSTREAM_API_KEY in .env}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY in .env}
+    restart: unless-stopped
